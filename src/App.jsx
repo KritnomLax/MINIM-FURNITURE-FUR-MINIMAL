@@ -16,6 +16,24 @@ import { WishlistProvider } from './context/WishlistContext';
 import { ToastProvider } from './context/ToastContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
+// ── Admin Guard: แสดงเฉพาะกับ Admin เท่านั้น ─────────────────
+const AdminGuard = () => {
+  const { user, isAdmin } = useAuth();
+  if (!user) return (
+    <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+      <p style={{ fontSize: '1.1rem', marginBottom: '8px' }}>🔒 กรุณาเข้าสู่ระบบก่อนเข้าหน้า Admin</p>
+    </div>
+  );
+  if (!isAdmin) return (
+    <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+      <p style={{ fontSize: '2rem', marginBottom: '12px' }}>🚫</p>
+      <p style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '8px' }}>ไม่มีสิทธิ์เข้าถึงหน้านี้</p>
+      <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>หน้านี้สำหรับผู้ดูแลระบบ (Admin) เท่านั้น</p>
+    </div>
+  );
+  return <AdminDashboard />;
+};
+
 // Page fade + slight upward slide on view change
 const pageVariants = {
   initial: { opacity: 0, y: 18 },
@@ -28,7 +46,7 @@ function MainApp() {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [currentView, setCurrentView] = useState('shop');
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
     const observerCallback = (entries, observer) => {
@@ -87,7 +105,7 @@ function MainApp() {
             )}
             {currentView === 'designer' && <Designer />}
             {currentView === 'profile'  && <UserProfile />}
-            {currentView === 'admin'    && <AdminDashboard />}
+            {currentView === 'admin'    && <AdminGuard />}
           </motion.div>
         </AnimatePresence>
       </main>

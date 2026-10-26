@@ -4,12 +4,14 @@ import { ShoppingBag, Menu, X, Heart, Sun, Moon, Cuboid, User, Shield } from 'lu
 import { useCart } from '../context/CartContext';
 import { useTheme } from '../context/ThemeContext';
 import { useWishlist } from '../context/WishlistContext';
+import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = ({ onCartClick, onWishlistClick, currentView, onNavigate }) => {
   const { cartCount } = useCart();
   const { isDarkMode, toggleTheme } = useTheme();
   const { wishlist } = useWishlist();
+  const { isAdmin } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -62,14 +64,17 @@ const Navbar = ({ onCartClick, onWishlistClick, currentView, onNavigate }) => {
             {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
           </button>
           
-          <button 
-            className="icon-btn admin-btn" 
-            onClick={() => handleNav('admin')} 
-            aria-label="ระบบจัดการแอดมิน" 
-            title="ระบบจัดการหลังบ้าน (Admin)"
-          >
-            <Shield size={22} />
-          </button>
+          {/* ปุ่ม Admin — แสดงเฉพาะผู้ที่มี role = admin */}
+          {isAdmin && (
+            <button 
+              className="icon-btn admin-btn" 
+              onClick={() => handleNav('admin')} 
+              aria-label="ระบบจัดการแอดมิน" 
+              title="ระบบจัดการหลังบ้าน (Admin)"
+            >
+              <Shield size={22} />
+            </button>
+          )}
 
           <button 
             className="icon-btn profile-btn" 
@@ -134,7 +139,9 @@ const Navbar = ({ onCartClick, onWishlistClick, currentView, onNavigate }) => {
         <a href="#" onClick={(e) => { e.preventDefault(); handleNav('shop'); }}>เลือกชมสินค้า</a>
         <a href="#" onClick={(e) => { e.preventDefault(); handleNav('designer'); }}>ออกแบบ 3D</a>
         <a href="#" onClick={(e) => { e.preventDefault(); handleNav('profile'); }}>ข้อมูลส่วนตัว & ประวัติคำสั่งซื้อ</a>
-        <a href="#" onClick={(e) => { e.preventDefault(); handleNav('admin'); }}>ระบบจัดการแอดมิน</a>
+        {isAdmin && (
+          <a href="#" onClick={(e) => { e.preventDefault(); handleNav('admin'); }}>ระบบจัดการแอดมิน</a>
+        )}
       </div>
     </nav>
   );

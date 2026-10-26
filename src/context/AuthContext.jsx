@@ -31,6 +31,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // ── ตรวจสอบว่า user คนปัจจุบันมี role = admin หรือไม่ ─────────
+  const isAdmin = (u) => {
+    if (!u) return false;
+    const meta = u.app_metadata ?? {};
+    return meta.role === 'admin';
+  };
+
   // ── Auth state listener ───────────────────────────────────────
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -39,11 +46,14 @@ export const AuthProvider = ({ children }) => {
       if (session?.user) fetchDesigns(session.user.id);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      // รีเฟรช session เพื่อให้ได้ app_metadata ล่าสุด (รองรับกรณีตั้ง admin หลัง login)
       if (session?.user) {
-        fetchDesigns(session.user.id);
+        const { data: { session: refreshed } } = await supabase.auth.refreshSession();
+        setUser(refreshed?.user ?? session.user);
+        fetchDesigns((refreshed?.user ?? session.user).id);
       } else {
+        setUser(null);
         setSavedDesigns([]);
       }
     });
@@ -123,6 +133,7 @@ export const AuthProvider = ({ children }) => {
   return (
     <AuthContext.Provider value={{
       user,
+      isAdmin: isAdmin(user),
       login,
       register,
       logout,
