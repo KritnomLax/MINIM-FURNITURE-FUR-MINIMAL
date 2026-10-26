@@ -1,0 +1,224 @@
+.admin-section {
+  padding: 40px 0 80px;
+  background-color: var(--color-bg);
+  min-height: calc(100vh - var(--nav-height));
+}
+
+/* ── Admin Tabs ─────────────────────────────────────────────── */
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 28px;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.admin-tab {
+  padding: 10px 24px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.admin-tab:hover { color: var(--color-text-primary); }
+.admin-tab.active {
+  color: var(--color-accent, #8b6914);
+  border-bottom-color: var(--color-accent, #8b6914);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-table th, .admin-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-table th {
+  background-color: var(--color-bg);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.admin-product-img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.edit-btn {
+  color: #3b82f6;
+  background-color: rgba(59, 130, 246, 0.1);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+.edit-btn:hover { background-color: rgba(59, 130, 246, 0.2); }
+
+.delete-btn {
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.1);
+  padding: 8px;
+  border-radius: var(--radius-sm);
+}
+.delete-btn:hover { background-color: rgba(239, 68, 68, 0.2); }
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.admin-modal {
+  background-color: var(--color-surface);
+  width: 100%;
+  max-width: 500px;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.admin-form .form-group {
+  margin-bottom: 16px;
+}
+
+.admin-form .form-group.row {
+  display: flex;
+  gap: 16px;
+}
+
+.admin-form .col {
+  flex: 1;
+}
+
+.admin-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.admin-form input, .admin-form select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* ── Status Select (Orders tab) ─────────────────────────────── */
+.status-select {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.status-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Expanded Order Detail Row ──────────────────────────────── */
+.order-detail-row td {
+  padding: 0 !important;
+  border-bottom: 2px solid var(--color-border);
+}
+
+.order-detail-panel {
+  padding: 16px 24px;
+  background-color: var(--color-bg);
+  animation: fadeSlideDown 0.2s ease;
+}
+
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.order-shipping-info {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+  margin-bottom: 12px;
+}
+
+.order-items-inner-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.order-items-inner-table th,
+.order-items-inner-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.order-items-inner-table th {
+  color: var(--color-text-secondary);
+  font-weight: 600;
+}
+
+/* ── Spinner (shared) ───────────────────────────────────────── */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}

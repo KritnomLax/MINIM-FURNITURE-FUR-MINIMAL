@@ -1,0 +1,376 @@
+/* ── Profile Page Layout ── */
+.profile-section {
+  padding: 40px 0 80px;
+  min-height: calc(100vh - var(--nav-height));
+  background-color: var(--color-bg);
+}
+
+/* ── Header Card ── */
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--color-surface);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.profile-info h2 {
+  font-size: 1.6rem;
+  color: var(--color-text-primary);
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.profile-info p {
+  color: var(--color-text-secondary);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* ── Tab Navigation ── */
+.profile-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  background-color: var(--color-surface);
+  padding: 6px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  width: fit-content;
+}
+
+.profile-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.profile-tab:hover {
+  color: var(--color-text-primary);
+  background-color: var(--color-bg);
+}
+
+.profile-tab.active {
+  background-color: var(--color-accent);
+  color: #fff;
+}
+
+/* ── Profile Card (shared wrapper) ── */
+.profile-card {
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-accent);
+}
+
+.card-header h3 {
+  font-size: 1.4rem;
+  color: var(--color-text-primary);
+}
+
+/* ── Shared States ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--color-text-secondary);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-border);
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 20px;
+  color: var(--color-text-secondary);
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+  color: var(--color-accent);
+}
+
+/* ── Orders List ── */
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Order Card (collapsible) ── */
+.order-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-bg);
+  transition: box-shadow var(--transition-fast);
+}
+
+.order-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.order-card-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  gap: 12px;
+  text-align: left;
+  transition: background-color var(--transition-fast);
+}
+
+.order-card-header:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.order-card-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.order-icon {
+  color: var(--color-accent);
+  flex-shrink: 0;
+}
+
+.order-id {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+  font-family: 'Courier New', monospace;
+}
+
+.order-date {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.order-card-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  color: var(--color-text-secondary);
+}
+
+.order-total {
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+/* ── Status Badge ── */
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  letter-spacing: 0.4px;
+}
+
+.status-pending    { background-color: #FEF3C7; color: #92400E; }
+.status-processing { background-color: #DBEAFE; color: #1E40AF; }
+.status-shipped    { background-color: #EDE9FE; color: #5B21B6; }
+.status-delivered  { background-color: #D1FAE5; color: #065F46; }
+.status-paid       { background-color: #DBEAFE; color: #1E40AF; }
+.status-completed  { background-color: #D1FAE5; color: #065F46; }
+.status-cancelled  { background-color: #FEE2E2; color: #991B1B; }
+
+/* ── Order Items Table ── */
+.order-items-list {
+  border-top: 1px solid var(--color-border);
+  padding: 0 20px 20px;
+  background-color: var(--color-surface);
+}
+
+.order-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+
+.order-items-table th {
+  text-align: left;
+  padding: 8px 12px;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.order-items-table td {
+  padding: 10px 12px;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.order-items-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Saved Designs Grid ── */
+.saved-designs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.design-card {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-bg);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.design-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.design-preview {
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 0.85;
+}
+
+.mock-table-top {
+  width: 60%;
+  height: 40%;
+  background-color: rgba(0, 0, 0, 0.2);
+  transform: perspective(400px) rotateX(60deg);
+  border-radius: 4px;
+  box-shadow: 0 20px 20px rgba(0, 0, 0, 0.3);
+}
+
+.design-details {
+  padding: 16px;
+}
+
+.design-details h4 {
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+  color: var(--color-text-primary);
+}
+
+.design-meta {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.design-date {
+  color: var(--color-text-light);
+  font-size: 0.8rem;
+  margin-bottom: 16px;
+}
+
+.design-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.btn-sm {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+.icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-btn {
+  color: #ef4444;
+  padding: 8px;
+  background-color: rgba(239, 68, 68, 0.1);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
+}
+
+.delete-btn:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+/* ── Dark Mode overrides ── */
+[data-theme='dark'] .status-pending    { background-color: #451A03; color: #FDE68A; }
+[data-theme='dark'] .status-processing { background-color: #1E3A5F; color: #BFDBFE; }
+[data-theme='dark'] .status-shipped    { background-color: #2E1065; color: #DDD6FE; }
+[data-theme='dark'] .status-delivered  { background-color: #064E3B; color: #A7F3D0; }
+[data-theme='dark'] .status-paid       { background-color: #1E3A5F; color: #BFDBFE; }
+[data-theme='dark'] .status-completed  { background-color: #064E3B; color: #A7F3D0; }
+[data-theme='dark'] .status-cancelled  { background-color: #7F1D1D; color: #FCA5A5; }
+[data-theme='dark'] .order-card-header:hover { background-color: rgba(255,255,255,0.03); }

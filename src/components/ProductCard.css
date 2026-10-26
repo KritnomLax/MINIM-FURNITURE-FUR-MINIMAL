@@ -1,0 +1,132 @@
+.product-card {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-bg);
+  transition: transform var(--transition-normal);
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+}
+
+.product-image-container {
+  position: relative;
+  aspect-ratio: 4/5;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-card:hover .product-image {
+  transform: scale(1.05);
+}
+
+.product-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.product-card:hover .product-overlay {
+  opacity: 1;
+}
+
+.product-actions {
+  display: flex;
+  gap: 12px;
+  transform: translateY(20px);
+  transition: transform var(--transition-normal);
+}
+
+.action-btn {
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  transition: all var(--transition-normal);
+}
+
+.action-btn:hover {
+  background-color: var(--color-accent);
+  color: white;
+  transform: scale(1.1);
+}
+
+.product-card:hover .product-actions {
+  transform: translateY(0);
+}
+
+.wishlist-btn-card {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
+}
+
+.product-card:hover .wishlist-btn-card,
+.wishlist-btn-card.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.wishlist-btn-card:hover {
+  color: var(--color-danger);
+}
+
+.wishlist-btn-card.active {
+  color: var(--color-danger);
+}
+
+.product-info {
+  padding: 14px 0 6px;
+}
+
+.product-category {
+  font-size: 0.75rem;
+  color: var(--color-text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.product-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin: 3px 0 6px;
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.product-price {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-accent);
+}

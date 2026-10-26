@@ -1,0 +1,273 @@
+﻿[PROJECT PROGRESS SUMMARY]
+เป้าหมายของโปรเจกต์: E-Commerce Furniture แบบ Premium มี UX/UI สวยงาม, 3D Designer Customizer, และเชื่อมฐานข้อมูลจริง (Supabase)
+
+สถานะปัจจุบัน (อัปเดตล่าสุด):
+1. [สำเร็จ] ระบบ CRUD สินค้า (Products) แอดมินสามารถเพิ่ม/ลด/แก้ไขได้
+2. [สำเร็จ] ระบบสมาชิก (Authentication) สามารถสมัครและล็อกอินผ่าน Supabase Auth ได้ (เปลี่ยนจาก Mock เป็นระบบจริง)
+3. [สำเร็จ] ระบบคำสั่งซื้อ (Orders & Order Items) - เมื่อลูกค้ากด Checkout จะบันทึกข้อมูลการสั่งซื้อและสินค้าในตะกร้าลงในตาราง `orders` และ `order_items` ใน Supabase ทันที
+* ทำให้โปรเจกต์บรรลุเป้าหมายการสอบ: "Relational Database: CRUD > 1 table" สมบูรณ์แบบ 100%
+
+Database Schema ปัจจุบัน:
+- `products`: id, name, price, category, description, image_url, width, depth
+- `users` (Supabase Auth)
+- `orders`: id, user_id, total_price, status, created_at
+- `order_items`: id, order_id, product_id, product_name, quantity, price
+
+สเตปต่อไปที่ต้องการคำแนะนำ (ถ้ามี):
+- การทำระบบ Photo Reviews สวยๆ หรือการใช้ Framer Motion เพิ่ม Animation
+- การใช้ @react-three/fiber เชื่อมต่อค่า Width/Depth จากตาราง products
+
+[FILE: src/context/AuthContext.jsx]
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { supabase } from '../config/supabaseClient';
+
+const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
+
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [savedDesigns, setSavedDesigns] = useState([]);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      setLoading(false);
+      if (session?.user) {
+        loadLocalDesigns(session.user.email);
+      }
+    });
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        loadLocalDesigns(session.user.email);
+      } else {
+        setSavedDesigns([]);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadLocalDesigns = (email) => {
+    const designs = localStorage.getItem('minim_designs_' + email);
+    if (designs) setSavedDesigns(JSON.parse(designs));
+  };
+
+  const login = async (email, password) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) throw error;
+    return data;
+  };
+
+  const register = async (email, password) => {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+    });
+    if (error) throw error;
+    return data;
+  };
+
+  const logout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) throw error;
+    setSavedDesigns([]);
+  };
+
+  const saveDesign = (designConfig) => {
+    if (!user) return false;
+    
+    const newDesign = {
+      ...designConfig,
+      id: Date.now(),
+      createdAt: new Date().toISOString()
+    };
+    
+    const updatedDesigns = [...savedDesigns, newDesign];
+    setSavedDesigns(updatedDesigns);
+    localStorage.setItem('minim_designs_' + user.email, JSON.stringify(updatedDesigns));
+    return true;
+  };
+
+  const deleteDesign = (designId) => {
+    if (!user) return;
+    const updatedDesigns = savedDesigns.filter(d => d.id !== designId);
+    setSavedDesigns(updatedDesigns);
+    localStorage.setItem('minim_designs_' + user.email, JSON.stringify(updatedDesigns));
+  };
+
+  return (
+    <AuthContext.Provider value={{ user, login, register, logout, savedDesigns, saveDesign, deleteDesign, loading }}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+};
+
+[FILE: src/components/CheckoutModal.jsx]
+import React, { useState } from 'react';
+import { X, CheckCircle } from 'lucide-react';
+import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
+import { useToast } from '../context/ToastContext';
+import { supabase } from '../config/supabaseClient';
+import './CheckoutModal.css';
+
+const CheckoutModal = ({ onClose }) => {
+  const { cartItems, cartTotal, clearCart } = useCart();
+  const { user } = useAuth();
+  const { addToast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    email: user ? user.email : '',
+    address: '',
+    city: '',
+    zipCode: '',
+    cardNumber: '',
+    expiry: '',
+    cvv: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!user) {
+      addToast('Please login to place an order.', 'error');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      const { data: orderData, error: orderError } = await supabase
+        .from('orders')
+        .insert([{ user_id: user.id, total_price: cartTotal }])
+        .select()
+        .single();
+        
+      if (orderError) throw orderError;
+      
+      const orderItems = cartItems
+        .filter(item => typeof item.id === 'number' || !isNaN(parseInt(item.id)))
+        .map(item => ({
+          order_id: orderData.id,
+          product_id: parseInt(item.id),
+          product_name: item.name,
+          quantity: item.quantity,
+          price: item.price
+        }));
+        
+      if (orderItems.length > 0) {
+        const { error: itemsError } = await supabase
+          .from('order_items')
+          .insert(orderItems);
+          
+        if (itemsError) throw itemsError;
+      }
+      
+      clearCart();
+      addToast('Order placed successfully! Thank you.', 'success');
+      onClose();
+    } catch (err) {
+      console.error("Checkout Error:", err);
+      addToast('Error placing order: ' + err.message, 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="checkout-overlay">
+      <div className="checkout-content">
+        <button className="checkout-close" onClick={onClose} disabled={isSubmitting}>
+          <X size={24} />
+        </button>
+        
+        <h2>Checkout</h2>
+        <p className="checkout-subtitle">Complete your purchase</p>
+        
+        <form className="checkout-form" onSubmit={handleSubmit}>
+          <div className="form-section">
+            <h3>Shipping Information</h3>
+            <div className="form-row">
+              <div className="form-group">
+                <label>First Name</label>
+                <input type="text" name="firstName" required value={formData.firstName} onChange={handleChange} disabled={isSubmitting} />
+              </div>
+              <div className="form-group">
+                <label>Last Name</label>
+                <input type="text" name="lastName" required value={formData.lastName} onChange={handleChange} disabled={isSubmitting} />
+              </div>
+            </div>
+            
+            <div className="form-group">
+              <label>Email Address</label>
+              <input type="email" name="email" required value={formData.email} onChange={handleChange} disabled={isSubmitting} />
+            </div>
+            
+            <div className="form-group">
+              <label>Address</label>
+              <input type="text" name="address" required value={formData.address} onChange={handleChange} disabled={isSubmitting} />
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label>City</label>
+                <input type="text" name="city" required value={formData.city} onChange={handleChange} disabled={isSubmitting} />
+              </div>
+              <div className="form-group">
+                <label>Zip Code</label>
+                <input type="text" name="zipCode" required value={formData.zipCode} onChange={handleChange} disabled={isSubmitting} />
+              </div>
+            </div>
+          </div>
+          
+          <div className="form-section">
+            <h3>Payment Details</h3>
+            <div className="form-group">
+              <label>Card Number</label>
+              <input type="text" name="cardNumber" placeholder="0000 0000 0000 0000" required value={formData.cardNumber} onChange={handleChange} disabled={isSubmitting} />
+            </div>
+            
+            <div className="form-row">
+              <div className="form-group">
+                <label>Expiry Date</label>
+                <input type="text" name="expiry" placeholder="MM/YY" required value={formData.expiry} onChange={handleChange} disabled={isSubmitting} />
+              </div>
+              <div className="form-group">
+                <label>CVV</label>
+                <input type="text" name="cvv" placeholder="123" required value={formData.cvv} onChange={handleChange} disabled={isSubmitting} />
+              </div>
+            </div>
+          </div>
+          
+          <div className="checkout-summary">
+            <div className="summary-row total">
+              <span>Total to pay</span>
+              <span>${cartTotal.toFixed(2)}</span>
+            </div>
+          </div>
+          
+          <button type="submit" className="btn-primary submit-btn" disabled={isSubmitting}>
+            {isSubmitting ? 'Processing...' : `Pay $${cartTotal.toFixed(2)}`}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default CheckoutModal;
