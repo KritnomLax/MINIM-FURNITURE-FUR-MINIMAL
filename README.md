@@ -3,7 +3,6 @@
 
 ## 📌 ข้อมูลโครงงาน
 - **วิชา:** 1145104-63 โครงงานวิทยาการข้อมูลและนวัตกรรมซอฟต์แวร์ 3
-- **ผู้พัฒนา:** กฤษดา (KritnomLax)
 - **เทคโนโลยีหลัก:** React 19, Vite, Three.js, @react-three/fiber, Supabase, Framer Motion, Lucide Icons
 
 ---
