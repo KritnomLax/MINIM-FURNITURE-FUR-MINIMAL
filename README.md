@@ -1,13 +1,13 @@
 # MINIM Furniture — Web Application
 > เว็บแอปพลิเคชันสำหรับร้านเฟอร์นิเจอร์ไม้แท้สไตล์มินิมอลสั่งผลิต พร้อมระบบจำลองแบบ 3 มิติ (3D Interactive Customizer)
 
-## 📌 ข้อมูลโครงงาน
+## ข้อมูลโครงงาน
 - **วิชา:** 1145104-63 โครงงานวิทยาการข้อมูลและนวัตกรรมซอฟต์แวร์ 3
 - **เทคโนโลยีหลัก:** React 19, Vite, Three.js, @react-three/fiber, Supabase, Framer Motion, Lucide Icons
 
 ---
 
-## ✨ ฟังก์ชันหลักของระบบ (Features)
+## ฟังก์ชันหลักของระบบ (Features)
 1. **Pure Solid Wood Catalog:** แสดงสินค้างานไม้แท้ 100% พร้อมระบบค้นหาและกรองตามหมวดหมู่ห้อง
 2. **3D Furniture Customizer:** โมเดลจำลอง 3 มิติ 4 ประเภท (โต๊ะ, เก้าอี้, ตู้, ชั้นวาง) หมุน 360°, สลับสีเนื้อไม้, ปรับสัดส่วน และประเมินราคาเรียลไทม์
 3. **Cart & Wishlist:** ระบบตะกร้าสินค้า และรายการโปรดที่บันทึกลงในระบบ
@@ -19,7 +19,7 @@
 
 ---
 
-## 📂 สารบัญเอกสารประกอบโครงงาน (Project Documentation)
+## สารบัญเอกสารประกอบโครงงาน (Project Documentation)
 - [LASTESTPROCESS.md](LASTESTPROCESS.md) — รายงานความคืบหน้าภาพรวมโครงการเทียบกับแผนรายวิชาฉบับล่าสุด
 - [Use_Case_Description_MINIM.md](Use_Case_Description_MINIM.md) — รายละเอียด Use Case Descriptions ทั้ง 12 เคส (สำหรับบทที่ 3)
 - [DATABASE_MODELING_MINIM.md](DATABASE_MODELING_MINIM.md) — แผนผังฐานข้อมูล ER-Diagram และ Data Dictionary (สำหรับบทที่ 3)
@@ -29,7 +29,7 @@
 
 ---
 
-## 🛠️ การติดตั้งและรันโปรเจกต์ (Getting Started)
+## การติดตั้งและรันโปรเจกต์ (Getting Started)
 
 ```bash
 # 1. ติดตั้ง Dependencies
