@@ -1,8 +1,7 @@
 # รายงานความคืบหน้าและการพัฒนาระบบ (Project Progress & Status Report)
 ## โครงงาน: MINIM Furniture — เว็บแอปพลิเคชันร้านเฟอร์นิเจอร์ไม้แท้มินิมอลสั่งผลิต
-**รหัสวิชา:** 1145104-63 โครงงานวิทยาการข้อมูลและนวัตกรรมซอฟต์แวร์ 3  
-**ผู้พัฒนา:** กฤษดา (KritnomLax)  
-**วันที่อัปเดตล่าสุด:** 3 พฤศจิกายน 2026  
+**รหัสวิชา:** 1145104-63 โครงงานวิทยาการข้อมูลและนวัตกรรมซอฟต์แวร์ 3   
+**วันที่อัปเดตล่าสุด:** 16 พฤศจิกายน 2026  
 **GitHub Repository:** [https://github.com/KritnomLax/MINIM-FURNITURE-FUR-MINIMAL](https://github.com/KritnomLax/MINIM-FURNITURE-FUR-MINIMAL)
 
 ---
